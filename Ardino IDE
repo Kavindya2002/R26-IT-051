@@ -1,0 +1,169 @@
+#include <WiFi.h>
+#include <WiFiManager.h>
+#include <HTTPClient.h>
+#include <Wire.h>
+
+#include <MPU6050_tockn.h>
+#include <BH1750.h>
+#include <VL53L0X.h>
+
+// ================= THINGSBOARD =================
+const char* serverName =
+"http://eu.thingsboard.cloud/api/v1/vqYBWsl1IozXT8oVFqqL/telemetry";
+
+// ================= PINS =================
+#define MOISTURE_PIN 34
+#define PIR_PIN 27
+
+// ================= SENSORS =================
+MPU6050 mpu(Wire);
+BH1750 lightMeter;
+VL53L0X laser;
+
+// =================================================
+
+void setup() {
+
+  Serial.begin(115200);
+
+  // ===== I2C =====
+  Wire.begin(21, 22);
+
+  // ===== MPU6050 =====
+  mpu.begin();
+  mpu.calcGyroOffsets(true);
+
+  // ===== BH1750 =====
+  lightMeter.begin();
+
+  // ===== VL53L0X =====
+  laser.init();
+  laser.setTimeout(500);
+
+  // ===== PIR =====
+  pinMode(PIR_PIN, INPUT);
+
+  // ===== WIFI MANAGER =====
+  WiFiManager wm;
+
+  bool res;
+
+  res = wm.autoConnect("ESP32-IOT-SETUP");
+
+  if (!res) {
+    Serial.println("WiFi Failed");
+    ESP.restart();
+  }
+
+  Serial.println("WiFi Connected!");
+  Serial.println(WiFi.localIP());
+
+  Serial.println("All Sensors Ready!");
+}
+
+// =================================================
+
+void loop() {
+
+  // ===== UPDATE MPU =====
+  mpu.update();
+
+  // ===== MPU6050 =====
+  float accX = mpu.getAccX();
+  float accY = mpu.getAccY();
+  float accZ = mpu.getAccZ();
+
+  float gyroX = mpu.getGyroX();
+  float gyroY = mpu.getGyroY();
+  float gyroZ = mpu.getGyroZ();
+
+  float temperature = mpu.getTemp();
+
+  // ===== BH1750 =====
+  float lux = lightMeter.readLightLevel();
+
+  // ===== MOISTURE =====
+  int moisture = analogRead(MOISTURE_PIN);
+
+  // ===== PIR =====
+  int motion = digitalRead(PIR_PIN);
+
+  // ===== VL53L0X =====
+  int distance = laser.readRangeSingleMillimeters();
+
+  // ===== SERIAL OUTPUT =====
+  Serial.println("========== SENSOR DATA ==========");
+
+  Serial.print("Temperature: ");
+  Serial.print(temperature);
+  Serial.println(" C");
+
+  Serial.print("Light: ");
+  Serial.print(lux);
+  Serial.println(" lx");
+
+  Serial.print("Moisture: ");
+  Serial.println(moisture);
+
+  Serial.print("Motion: ");
+  Serial.println(motion);
+
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" mm");
+
+  Serial.print("AccX: ");
+  Serial.print(accX);
+
+  Serial.print(" | AccY: ");
+  Serial.print(accY);
+
+  Serial.print(" | AccZ: ");
+  Serial.println(accZ);
+
+  Serial.print("GyroX: ");
+  Serial.print(gyroX);
+
+  Serial.print(" | GyroY: ");
+  Serial.print(gyroY);
+
+  Serial.print(" | GyroZ: ");
+  Serial.println(gyroZ);
+
+  // ===== SEND TO THINGSBOARD =====
+  if (WiFi.status() == WL_CONNECTED) {
+
+    HTTPClient http;
+
+    http.begin(serverName);
+
+    http.addHeader("Content-Type", "application/json");
+
+    String jsonData = "{";
+
+    jsonData += "\"temperature\":" + String(temperature) + ",";
+    jsonData += "\"light\":" + String(lux) + ",";
+    jsonData += "\"moisture\":" + String(moisture) + ",";
+    jsonData += "\"motion\":" + String(motion) + ",";
+    jsonData += "\"distance\":" + String(distance) + ",";
+
+    jsonData += "\"accX\":" + String(accX) + ",";
+    jsonData += "\"accY\":" + String(accY) + ",";
+    jsonData += "\"accZ\":" + String(accZ) + ",";
+
+    jsonData += "\"gyroX\":" + String(gyroX) + ",";
+    jsonData += "\"gyroY\":" + String(gyroY) + ",";
+    jsonData += "\"gyroZ\":" + String(gyroZ);
+
+    jsonData += "}";
+
+    int httpResponseCode = http.POST(jsonData);
+
+    Serial.print("HTTP Response: ");
+    Serial.println(httpResponseCode);
+
+    http.end();
+  }
+
+  delay(1000);
+}
