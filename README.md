@@ -75,16 +75,6 @@ The model with the highest accuracy on the test set is selected automatically as
 
 ---
 
-## Output Files
 
-After running `main.py`, the following files are created:
-
-| File | Contents |
-|---|---|
-| `data/fall_detection_dataset.csv` | Full 10,000-row synthetic dataset |
-| `outputs/model_results_summary.csv` | Accuracy, Precision, Recall, F1 for all models |
-| `models/*.pkl` | Saved trained model files |
-
----
 
 
