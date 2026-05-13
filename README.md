@@ -2,7 +2,6 @@
 
 # 🛡️ Multimodal Intelligent Fall Monitoring System for Elderly Care
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-Realtime-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com/)
@@ -11,7 +10,7 @@
 
 <br/>
 
-> **A proactive, AI-powered, multimodal monitoring system that predicts, detects, and responds to elderly fall risks in real time — before injury occurs.**
+> **A proactive, AI-powered, multimodal monitoring system that predicts, detects and responds to elderly fall risks in real time — before injury occurs.**
 
 <br/>
 
@@ -35,7 +34,7 @@
 - [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
 - [Research & References](#-research--references)
-- [License](#-license)
+
 
 ---
 
@@ -43,7 +42,7 @@
 
 The **Multimodal Intelligent Fall Monitoring System** is a final-year research project (IT4010 – 2026) developed at the **SST – Software Systems & Technologies** research group. It addresses one of the most pressing challenges in elderly healthcare: fall prevention and rapid response.
 
-Unlike traditional reactive fall detection systems, this solution takes a **proactive, context-aware, and explainable approach** — fusing AI, IoT, wearable sensors, and real-time dashboards to identify and mitigate fall risks *before* incidents occur.
+Unlike traditional reactive fall detection systems, this solution takes a **proactive, context-aware and explainable approach** — fusing AI, IoT, wearable sensors, and real-time dashboards to identify and mitigate fall risks *before* incidents occur.
 
 **Project ID:** `R26-IT-051`
 
@@ -51,13 +50,13 @@ Unlike traditional reactive fall detection systems, this solution takes a **proa
 
 ## ⚠️ Problem Statement
 
-Falls are among the leading causes of injury, disability, hospitalization, and mortality among elderly individuals worldwide. Existing systems are predominantly **reactive** — they only alert after a fall has happened. Key gaps in current technology include:
+Falls are among the leading causes of injury, disability, hospitalization and mortality among elderly individuals worldwide. Existing systems are predominantly **reactive** — they only alert after a fall has happened. Key gaps in current technology include:
 
 | Gap | Description |
 |-----|-------------|
 | 🔴 Reactive-only detection | No proactive fall risk prediction |
 | 🔴 Limited context awareness | Cannot analyze environmental conditions or activity sequences |
-| 🔴 Poor environmental monitoring | Wet floors, poor lighting, and obstacles are ignored |
+| 🔴 Poor environmental monitoring | Wet floors, poor lighting and obstacles are ignored |
 | 🔴 Insufficient explainability | Black-box AI outputs with no reasoning |
 | 🔴 High false alarm rates | Single-sensor approaches lack redundancy |
 | 🔴 No recovery guidance | Systems stop at detection, offering no post-fall support |
@@ -106,7 +105,7 @@ Falls are among the leading causes of injury, disability, hospitalization, and m
 
 Processes wearable sensor streams (accelerometer + gyroscope) to classify activities and detect unstable movement sequences. Outputs a **confidence-based fall risk score** with explainable reasoning.
 
-- Data collection, preprocessing, and windowed feature extraction
+- Data collection, preprocessing and windowed feature extraction
 - ML-based activity classification (SVM, Neural Networks, etc.)
 - Sequence analysis for behavioral instability detection
 - Confidence percentage generation per prediction
@@ -273,9 +272,6 @@ This research directly contributes to:
 
 ---
 
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
 
 ---
 
